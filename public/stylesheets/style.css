@@ -1,0 +1,23 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.received__message .user-chat{
+  color:#21B4DC;
+  font-weight:bold;
+  margin-right:2px;
+}
+
+.sent__message .user-chat{
+  background-color:#FF20AB;
+  padding:3px 4px;
+  border-radius:10px;
+  margin-right:2px;
+  color:white;
+  font-weight: bold;
+}
