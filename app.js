@@ -6,9 +6,9 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var socket = require('socket.io'); 
+var cors = require('cors');
 
 require('./models/User');
- 
 mongoose.connect('mongodb://localhost/lumikastream');
 
 var indexRouter = require('./routes/index');
@@ -17,44 +17,47 @@ var usersRouter = require('./routes/users');
 // App setup
 var PORT = 5000;
 var app = express();
-// // var server = app.listen(PORT, function () {
-// //   console.log(`Listening on port ${PORT}`);
-// //   console.log(`http://localhost:${PORT}`);
-// // });
-
-// // Static files
-// app.use(express.static("public"));
-
-// //Socket setup
-// var io = socket(server);
-// var activeUsers = new Set();
-
-// io.on("connection", function (socket) {
-//   console.log("Made socket connection");
-
-//   socket.on("new user", function (data) {
-//     socket.userId = data;
-//     activeUsers.add(data);
-//     io.emit("new user", [...activeUsers]);
-//   });
-
-//   socket.on("disconnect", () => {
-//     activeUsers.delete(socket.userId);
-//     io.emit("user disconnected", socket.userId);
-//   });
-
-//   socket.on("chat message", function (data) {
-//     io.emit("chat message", data);
-//   });
-
-//   // socket.on("typing", function (data) {
-//   //   socket.broadcast.emit("typing", data);
-//   // });
-// });
+app.use(cors());
+var server = app.listen(PORT, function () {
+  console.log(`Listening on port ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
+});
 
 app.get('/', function (req, res){
-  res.sendFile(__dirname + '/inscription.html')
+  res.sendFile(__dirname + '/public/inscription.html')
 });
+
+// Static files
+app.use(express.static("public"));
+
+//Socket setup
+var io = socket(server);
+var activeUsers = new Set();
+
+io.on("connection", function (socket) {
+  console.log("Made socket connection");
+
+  socket.on("new user", function (data) {
+    socket.userId = data;
+    activeUsers.add(data);
+    io.emit("new user", [...activeUsers]);
+  });
+
+  socket.on("disconnect", () => {
+    activeUsers.delete(socket.userId);
+    io.emit("user disconnected", socket.userId);
+  });
+
+  socket.on("chat message", function (data) {
+    io.emit("chat message", data);
+  });
+
+  // socket.on("typing", function (data) {
+  //   socket.broadcast.emit("typing", data);
+  // });
+});
+
+
 
 
 // view engine setup

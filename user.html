@@ -57,7 +57,7 @@
           </li>
 
           <li class="nav-site-links">
-            <a href="#"> <svg class="icon icon-nav icon-video-camera"><use xlink:href="#icon-video-camera"></use></svg> Channels</a>
+            <a href="channel.html"> <svg class="icon icon-nav icon-video-camera"><use xlink:href="#icon-video-camera"></use></svg> Channels</a>
           </li>
 
           <li class="nav-site-inscription">
@@ -68,23 +68,24 @@
       </nav>
     </header>
 
-    <main class="main-wrapper-site main-wrapper-form">
-      <section class="form-container">
-        <h2 class="form-title">INSCRIPTION</h2>
-        
-        <form action="/users/signup" method="post">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" required>
-            <label for="name">Nom</label>
-            <input type="text" name="name" id="name" required>
-            <label for="firstName">Prénom</label>
-            <input type="text" name="firstName" id="firstName" required>
-            <label for="email">E-mail</label>
-            <input type="email" name="email" id="email" required>
-            <label for="password">Mot de passe</label>
-            <input type="password" name="password" id="password" required>
-            <input class="form-submit-button" type="submit" value="Envoyer" name="envoyer">
+    <main class="main-wrapper-site main-wrapper-user">
+      <section class="form-container user-container profil-user-container">
+        <div class="user-titles">
+          <h2>Mon profil</h2>
+          <h2><a href="user-channel.html">Ma Chaîne</a></h2>
+        </div>
+
+        <form action="" method="post">
+            <label for="pseudo">Pseudo</label>
+            <input type="text" name="pseudo" id="pseudo">
+            <label for="profil-picture">Ma photo de profil</label>
+            <div id="profil-picture-container" class="profil-picture-container">
+              <img id="preview-image" class="preview-image" src="" alt="">
+              <input type="file" name="profil-picture" id="profil-picture-btn" >
+            </div>
+            <input class="form-submit-button" type="submit" value="Enregistrer les modifications" name="envoyer">
         </form>
+        <div class="rounded-corners-gradient-borders"></div>
       </section>
     </main>
     <script src="asset/script/script.js"></script>
