@@ -2,10 +2,10 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var bodyParser = require("body-parser");
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
-var socket = require('socket.io'); 
 var NodeMediaServer = require('./media_server');
 var debug = require('debug')('lumikastream-back:server');
 var http = require('http');
@@ -13,17 +13,20 @@ var app = express();
 var cors = require('cors');
 
 require('./models/User');
+require('./models/Channel');
  
 mongoose.connect('mongodb://localhost/lumikastream');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var channelsRouter = require('./routes/channels');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 console.log(port);
 
 var server = http.createServer(app);
+
 app.use(cors());
 
 /**
@@ -93,8 +96,17 @@ function onListening() {
 // Static files
 app.use(express.static("public"));
 
+
+
 //Socket setup
-var io = socket(server);
+var io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET','POST']
+  }
+  
+});
+
 var activeUsers = new Set();
 
 io.on("connection", function (socket) {
@@ -124,18 +136,33 @@ io.on("connection", function (socket) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.get('/', function (req, res){
+  res.sendFile(__dirname + '/public/inscription.html')
+});
+
 app.get('/stream', function (req, res){
   res.sendFile(__dirname + '/stream.html')
 });
+
+app.get('/chat', function (req, res){
+  res.sendFile(__dirname + '/public/chat.html')
+});
+
+app.get('/channel', function (req, res){
+  res.sendFile(__dirname + '/public/channel.html')
+});
+
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/channels', channelsRouter);
 
 
 // catch 404 and forward to error handler
