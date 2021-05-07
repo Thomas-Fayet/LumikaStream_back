@@ -12,6 +12,7 @@ var http = require('http');
 var app = express();
 var cors = require('cors');
 
+
 require('./models/User');
 require('./models/Channel');
  
@@ -92,6 +93,7 @@ function onListening() {
 
 ////////////////////////////////////////////////////////////////// APP.JS //////////////////////////////////////////////////////////////////////////
 
+app.use(express.json());
 
 // Static files
 app.use(express.static("public"));
@@ -127,31 +129,11 @@ io.on("connection", function (socket) {
     io.emit("chat message", data);
   });
 
-  // socket.on("typing", function (data) {
-  //   socket.broadcast.emit("typing", data);
-  // });
 });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-app.get('/', function (req, res){
-  res.sendFile(__dirname + '/public/inscription.html')
-});
-
-app.get('/stream', function (req, res){
-  res.sendFile(__dirname + '/stream.html')
-});
-
-app.get('/chat', function (req, res){
-  res.sendFile(__dirname + '/public/chat.html')
-});
-
-app.get('/channel', function (req, res){
-  res.sendFile(__dirname + '/public/channel.html')
-});
-
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -184,6 +166,7 @@ app.use(function(err, req, res, next) {
 server.listen(port, function(port){
   console.log('listening to:' + port)
 });
+
 
 server.on('error', onError);
 server.on('listening', onListening);
