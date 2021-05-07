@@ -7,8 +7,8 @@ var validateEmail = function(email){
 };
 
 var UserSchema = new Schema({
-    username: { type: String, required: true, unique: true},
-    name: { type: String, required: true },
+    userName: { type: String, required: true, unique: true},
+    familyName: { type: String, required: true },
     firstName: { type: String, required: true },
     email: { type: String, required: true, unique: true, validate: [validateEmail, 'Please fill an address mail'] },
     password: { type: String, required: true}

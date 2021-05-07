@@ -12,6 +12,7 @@ var http = require('http');
 var app = express();
 var cors = require('cors');
 
+
 require('./models/User');
  
 mongoose.connect('mongodb://localhost/lumikastream');
@@ -89,6 +90,7 @@ function onListening() {
 
 ////////////////////////////////////////////////////////////////// APP.JS //////////////////////////////////////////////////////////////////////////
 
+app.use(express.json());
 
 // Static files
 app.use(express.static("public"));
@@ -128,6 +130,15 @@ app.get('/stream', function (req, res){
   res.sendFile(__dirname + '/stream.html')
 });
 
+app.get('/', function (req, res){
+  res.sendFile(__dirname + '/public/inscription.html')
+});
+
+app.get('/chat', function (req, res){
+  res.sendFile(__dirname + '/public/chat.html')
+});
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -137,6 +148,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+// app.post('/profil', auth, function (req, res) {
+//   res.redirect(__dirname + '/public/user.html')
+// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -157,6 +171,7 @@ app.use(function(err, req, res, next) {
 server.listen(port, function(port){
   console.log('listening to:' + port)
 });
+
 
 server.on('error', onError);
 server.on('listening', onListening);

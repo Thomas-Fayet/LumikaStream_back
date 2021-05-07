@@ -4,6 +4,7 @@ var router = express.Router();
 
 var userController = require('../controllers/user');
 
+
 /* GET users listing. */
 router.get('/', async (req, res, next) => {
   res.json(await mongoose.model('User').find({}));
